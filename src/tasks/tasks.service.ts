@@ -18,17 +18,21 @@ export class TaskService {
       email: "xyz@gmail.com"
     }]
 
-  findAll() {
-    return this.tasks.map((task) => ({
-      task,
-      subtask: this.subtasks.filter((s) => s.taskId === task.id),
-    }));
-  }
+  findAll(page = 1, limit = 10) {
+  const firstIndex = (page - 1) * limit;
+  const lastIndex = page * limit;
+  const taskss = this.tasks.slice(firstIndex, lastIndex);
+  return taskss.map((task) => ({
+    task,
+    subtask: this.subtasks.filter((s) => s.taskId === task.id),
+  }));
+}
 
-  findAllSubtask(): any {
-    console.log(this.subtasks);
-    return this.subtasks;
-  }
+findAllSubtask(page = 1, limit = 10): any {
+  const firstIndex = (page - 1) * limit;
+  const lastIndex = page * limit;
+  return this.subtasks.slice(firstIndex, lastIndex);
+}
 
   findOne(id: number): Tasks {
     const task = this.tasks.find((p) => p.id === id);

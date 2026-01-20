@@ -7,26 +7,33 @@ export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Get()
-  findAll(){
-    return this.taskService.findAll();
+  findAll( @Query('page') page: string,
+    @Query('limit') limit: string,
+  ) {
+    const pageNum = +page || 1;
+    const limitNum = +limit || 10;
+    return this.taskService.findAll(pageNum, limitNum);
   }
 
   @Get('subtasks')
-  findAllSubtask() {
-    return this.taskService.findAllSubtask();
+  findAllSubtask(
+    @Query('page') page: string,
+    @Query('limit') limit: string,
+  ) {
+    const pageNum = +page || 1;
+    const limitNum = +limit || 10;
+    return this.taskService.findAllSubtask(pageNum, limitNum);
   }
-
-
-  @Get(':id')
-  findOne(@Param('id') id: string){
-    return this.taskService.findOne(+id);
-  }
-
 
   @Post() 
   createTask(@Body() createTaskDto: CreateTaskDto) { 
     console.log('Received Task:', createTaskDto);
     return this.taskService.create(createTaskDto);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string){
+    return this.taskService.findOne(+id);
   }
 
   @Delete(':id')
